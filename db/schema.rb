@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_162252) do
+ActiveRecord::Schema.define(version: 2019_11_14_171444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,12 +31,28 @@ ActiveRecord::Schema.define(version: 2019_11_14_162252) do
     t.integer "recovery_on_hit"
     t.integer "recovery_on_block"
     t.integer "recovery_on_whiff"
-    t.boolean "cancellable", default: true
+    t.string "cancellable", default: ""
     t.integer "blockstun"
     t.string "immune_to"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "character_id"
+  end
+
+  create_table "supers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "input"
+    t.integer "startup_frames"
+    t.integer "recovery_on_hit"
+    t.integer "recovery_on_block"
+    t.integer "recovery_on_whiff"
+    t.string "cancellable"
+    t.integer "blockstun"
+    t.string "immune_to"
+    t.integer "character_id"
+    t.integer "meter_used"
   end
 
 end

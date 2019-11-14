@@ -50,7 +50,7 @@ class Api::V1::CharactersController < ApplicationController
   end
 
   def char_params
-    params.require(:character).permit(:name)
+    params.require(:character).permit(:name, :dlc, :discord_link, :combo_doc_link)
   end
 
 end

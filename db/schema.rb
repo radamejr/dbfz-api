@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_13_213406) do
+ActiveRecord::Schema.define(version: 2019_11_14_162252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,21 @@ ActiveRecord::Schema.define(version: 2019_11_13_213406) do
     t.string "combo_doc_link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "normals", force: :cascade do |t|
+    t.string "input"
+    t.integer "startup_frames"
+    t.integer "active_frames"
+    t.integer "recovery_on_hit"
+    t.integer "recovery_on_block"
+    t.integer "recovery_on_whiff"
+    t.boolean "cancellable", default: true
+    t.integer "blockstun"
+    t.string "immune_to"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "character_id"
   end
 
 end

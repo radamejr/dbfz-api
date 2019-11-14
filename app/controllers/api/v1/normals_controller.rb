@@ -1,6 +1,6 @@
 class Api::V1::NormalsController < ApplicationController
   before_action :set_character
-  before_action :set_normals, only: [:show, :update]
+  before_action :set_normals, only: [:show, :update, :destroy]
 
   def index
     @normal = @character.normals.all
@@ -21,6 +21,15 @@ class Api::V1::NormalsController < ApplicationController
   def show
     render json: {status: "SUCCESS", message: "Showing Normal", data: @normal}, status: :ok
 
+  end
+
+  def destroy
+    
+    if @normal.destroy
+      render json: {status: "SUCCESS", message: "Deleted normal", data: @normal}, status: :ok
+    else
+      head(:unprocessable_entity)
+    end
   end
 
   def update

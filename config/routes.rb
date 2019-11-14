@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :characters do
-        resources :normals, only: [:index, :create, :show, :update]
+        resources :normals, only: [:index, :create, :show, :update, :destroy]
+        resources :supers, only: [:index, :create, :show, :update, :destroy]
       end
     end
   end

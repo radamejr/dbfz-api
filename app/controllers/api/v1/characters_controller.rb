@@ -28,16 +28,16 @@ class Api::V1::CharactersController < ApplicationController
   end
 
   def show
-    render json: {status: "SUCCESS", message: "Showing Character", data: @character}, status: :ok
+    render json: @character, status: :ok
 
   end
 
   def update
     
     if @character.update_attributes(char_params)
-      render json: {status: "SUCCESS", message: "Updated Character", data: @character}, status: :ok
+      render json: @character, status: :ok
     else
-      render json: {status: "SUCCESS", message: "Can't Update Character", data: @character}, status: :unprocessable_entity
+      render json: @character, status: :unprocessable_entity
     end
     
   end

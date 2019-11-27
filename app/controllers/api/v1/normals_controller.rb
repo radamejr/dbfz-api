@@ -3,30 +3,30 @@ class Api::V1::NormalsController < ApplicationController
   before_action :set_normals, only: [:show, :update, :destroy]
 
   def index
-    @normal = @character.normals.all
+    @normals = @character.normals.all
 
-    render json: {status: "SUCCESS", message: "Showing normals", data: @normal}, status: :ok
+    render json: @normals, status: :ok
   end
 
   def create
     @normal = @character.normals.create(normal_params)
 
     if @normal.persisted?
-      render json: {status: "SUCCESS", message: "Added normal", data: @normal}, status: :ok
+      render json: @normal, status: :ok
     else
-      render json: {status: "FAILED", message: "Could not add Normal", data: @normal}, status: :unproccessable_entity
+      render json: @normal, status: :unproccessable_entity
     end
   end
 
   def show
-    render json: {status: "SUCCESS", message: "Showing Normal", data: @normal}, status: :ok
+    render json: @normal, status: :ok
 
   end
 
   def destroy
     
     if @normal.destroy
-      render json: {status: "SUCCESS", message: "Deleted normal", data: @normal}, status: :ok
+      render json: @normal, status: :ok
     else
       head(:unprocessable_entity)
     end
@@ -35,9 +35,9 @@ class Api::V1::NormalsController < ApplicationController
   def update
 
     if @normal.update_attributes(normal_params)
-      render json: {status: "SUCCESS", message: "Updated Normal", data: @normal}, status: :ok
+      render json: @normal, status: :ok
     else
-      render json: {status: "SUCCESS", message: "Can't Update Normal", data: @normal}, status: :unprocessable_entity
+      render json: @normal, status: :unprocessable_entity
     end
   end
 

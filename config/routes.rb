@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       resources :characters do
         resources :normals, only: [:index, :create, :show, :update, :destroy]
         resources :supers, only: [:index, :create, :show, :update, :destroy]
+        resources :specials, only: [:index, :create, :show, :update, :destroy]
       end
     end
   end

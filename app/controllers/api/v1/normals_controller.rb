@@ -53,6 +53,6 @@ class Api::V1::NormalsController < ApplicationController
   end
   
   def normal_params
-    params.require(:normal).permit(:input, :startup_frames, :active_frames, :recovery_on_hit, :recovery_on_block, :recovery_on_whiff, :cancellable, :blockstun, :immune_to, :picture) 
+    params.require(:normal).permit(:input, :startup, :active, :recovery, :advantage, :gaurd, :immune_to, :picture, :properties, :special_notes, :move_type) 
   end
 end

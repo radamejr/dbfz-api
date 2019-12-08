@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_08_200441) do
+ActiveRecord::Schema.define(version: 2019_12_08_213745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,35 +28,37 @@ ActiveRecord::Schema.define(version: 2019_12_08_200441) do
 
   create_table "normals", force: :cascade do |t|
     t.string "input"
-    t.integer "startup_frames"
-    t.integer "active_frames"
-    t.integer "recovery_on_hit"
-    t.integer "recovery_on_block"
-    t.integer "recovery_on_whiff"
-    t.string "cancellable", default: ""
-    t.integer "blockstun"
+    t.integer "startup"
+    t.integer "active"
+    t.integer "recovery"
+    t.integer "advantage"
     t.string "immune_to"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "character_id"
     t.string "picture"
+    t.string "gaurd"
+    t.string "properties"
+    t.text "special_notes"
+    t.string "type"
   end
 
   create_table "specials", force: :cascade do |t|
     t.string "name"
     t.string "input"
-    t.integer "startup_frames"
-    t.integer "recovery_on_hit"
-    t.integer "recovery_on_block"
-    t.integer "recovery_on_whiff"
-    t.boolean "cancellable", default: true
-    t.integer "blockstun"
+    t.integer "startup"
+    t.integer "recovery"
+    t.integer "advantage"
     t.string "immune_to"
     t.integer "character_id"
     t.integer "meter_used"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "picture"
+    t.string "gaurd"
+    t.string "properties"
+    t.text "special_notes"
+    t.string "active"
   end
 
   create_table "supers", force: :cascade do |t|
@@ -64,16 +66,17 @@ ActiveRecord::Schema.define(version: 2019_12_08_200441) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.string "input"
-    t.integer "startup_frames"
-    t.integer "recovery_on_hit"
-    t.integer "recovery_on_block"
-    t.integer "recovery_on_whiff"
-    t.string "cancellable"
-    t.integer "blockstun"
+    t.integer "startup"
+    t.integer "recovery"
+    t.integer "advantage"
     t.string "immune_to"
     t.integer "character_id"
     t.integer "meter_used"
     t.string "picture"
+    t.string "gaurd"
+    t.string "properties"
+    t.text "special_notes"
+    t.string "active"
   end
 
 end

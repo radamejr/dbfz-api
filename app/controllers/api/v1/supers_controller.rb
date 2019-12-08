@@ -54,6 +54,6 @@ class Api::V1::SupersController < ApplicationController
   end
   
   def super_params
-    params.require(:super).permit(:name, :input, :startup_frames, :active_frames, :recovery_on_hit, :recovery_on_block, :recovery_on_whiff, :cancellable, :blockstun, :immune_to, :meter_used, :picture) 
+    params.require(:super).permit(:name, :input, :startup, :active, :recovery, :advantage, :gaurd, :immune_to, :picture, :properties, :special_notes, :meter_used) 
   end
 end

@@ -54,6 +54,6 @@ class Api::V1::SpecialsController < ApplicationController
   end
   
   def special_params
-    params.require(:special).permit(:name, :input, :startup_frames, :active_frames, :recovery_on_hit, :recovery_on_block, :recovery_on_whiff, :cancellable, :blockstun, :immune_to, :meter_used) 
+    params.require(:special).permit(:name, :input, :startup_frames, :active_frames, :recovery_on_hit, :recovery_on_block, :recovery_on_whiff, :cancellable, :blockstun, :immune_to, :meter_used, :picture) 
   end
 end

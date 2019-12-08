@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_08_143351) do
+ActiveRecord::Schema.define(version: 2019_12_08_200441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2019_12_08_143351) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "character_id"
+    t.string "picture"
   end
 
   create_table "specials", force: :cascade do |t|
@@ -55,6 +56,7 @@ ActiveRecord::Schema.define(version: 2019_12_08_143351) do
     t.integer "meter_used"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "picture"
   end
 
   create_table "supers", force: :cascade do |t|
@@ -71,6 +73,7 @@ ActiveRecord::Schema.define(version: 2019_12_08_143351) do
     t.string "immune_to"
     t.integer "character_id"
     t.integer "meter_used"
+    t.string "picture"
   end
 
 end

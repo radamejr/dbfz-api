@@ -4,4 +4,5 @@ class Character < ApplicationRecord
   has_many :specials, dependent: :destroy
 
   mount_base64_uploader :icon, PictureUploader
+  mount_base64_uploader :character_picture, PictureUploader
 end

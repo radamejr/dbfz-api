@@ -24,7 +24,7 @@ module DbfzChar
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 
-    config.middleware.use Rack::Cors do
+    config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
         resource '*',
@@ -33,6 +33,7 @@ module DbfzChar
         methods: [:get, :post, :patch, :put, :delete, :options]
       end
     end
+
     config.middleware.use ActionDispatch::Flash
     
     # Settings in config/environments/* take precedence over those specified here.

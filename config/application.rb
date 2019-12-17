@@ -26,11 +26,13 @@ module DbfzChar
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins '*'
+        origins 'http://localhost:8080', 'http://localhost:3030'
+        
         resource '*',
         headers: :any,
         expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
-        methods: [:get, :post, :patch, :put, :delete, :options]
+        methods: [:get, :post, :patch, :put, :delete, :options],
+        credentials: true
       end
     end
 

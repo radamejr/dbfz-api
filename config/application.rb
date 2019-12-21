@@ -33,9 +33,11 @@ module DbfzChar
         expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
         methods: [:get, :post, :patch, :put, :delete, :options],
         credentials: true
+        
       end
     end
-
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
     config.middleware.use ActionDispatch::Flash
     
     # Settings in config/environments/* take precedence over those specified here.

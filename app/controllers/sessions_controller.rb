@@ -25,7 +25,7 @@ class SessionsController < ApplicationController
         else
             render json: {
                 logged_in: false,
-                message: 'no such user'
+                message: 'no session found'
             }
         end
     end

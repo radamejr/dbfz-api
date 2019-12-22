@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_21_133836) do
+ActiveRecord::Schema.define(version: 2019_12_22_190408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,19 +47,11 @@ ActiveRecord::Schema.define(version: 2019_12_21_133836) do
   create_table "specials", force: :cascade do |t|
     t.string "name"
     t.string "input"
-    t.integer "startup"
-    t.integer "recovery"
-    t.integer "advantage"
-    t.string "immune_to"
     t.integer "character_id"
-    t.integer "meter_used"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "picture"
-    t.string "gaurd"
-    t.string "properties"
     t.text "special_notes"
-    t.string "active"
   end
 
   create_table "supers", force: :cascade do |t|
@@ -85,6 +77,23 @@ ActiveRecord::Schema.define(version: 2019_12_21_133836) do
     t.string "email"
     t.string "password_digest"
     t.boolean "admin", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "variants", force: :cascade do |t|
+    t.string "input_type"
+    t.integer "startup"
+    t.integer "recovery"
+    t.integer "active"
+    t.integer "advantage"
+    t.integer "immune_to"
+    t.integer "meter_used"
+    t.string "gaurd"
+    t.string "properties"
+    t.string "special_notes"
+    t.integer "special_id"
+    t.string "picture"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

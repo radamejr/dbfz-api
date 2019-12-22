@@ -54,6 +54,6 @@ class Api::V1::SpecialsController < ApplicationController
   end
   
   def special_params
-    params.require(:special).permit(:name, :input, :startup, :active, :recovery, :advantage, :gaurd, :immune_to, :picture, :properties, :special_notes, :meter_used) 
+    params.require(:special).permit(:name, :input, :special_notes, :picture) 
   end
 end

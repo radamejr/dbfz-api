@@ -10,10 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_22_190408) do
+ActiveRecord::Schema.define(version: 2019_12_22_224726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "assists", force: :cascade do |t|
+    t.integer "startup"
+    t.integer "blockstun"
+    t.integer "active"
+    t.integer "onscreen"
+    t.integer "hitstop_block"
+    t.integer "hitstop_hit"
+    t.string "special_notes"
+    t.integer "character_id"
+    t.string "picture"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "characters", force: :cascade do |t|
     t.string "name"

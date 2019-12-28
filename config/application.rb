@@ -26,7 +26,7 @@ module DbfzChar
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'https://framehameha.herokuapp.com'
+        origins Rails.application.config.allowed_cors_origins
         
         resource '*',
         headers: :any,

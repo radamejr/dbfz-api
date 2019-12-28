@@ -26,7 +26,7 @@ module DbfzChar
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'http://localhost:8080', 'https://framehameha.herokuapp.com/', 'http://framehameha.herokuapp.com/'
+        origins ['http://localhost:8080', 'https://framehameha.herokuapp.com/']
         
         resource '*',
         headers: :any,
@@ -35,10 +35,13 @@ module DbfzChar
         credentials: true
         
       end
+      
     end
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
     config.middleware.use ActionDispatch::Flash
+
+    config.allowed_cors_origins 
     
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

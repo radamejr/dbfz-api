@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_22_224726) do
+ActiveRecord::Schema.define(version: 2019_12_28_133548) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2019_12_22_224726) do
     t.string "icon"
     t.string "character_picture"
     t.string "twitter_tag"
+    t.text "about"
   end
 
   create_table "normals", force: :cascade do |t|

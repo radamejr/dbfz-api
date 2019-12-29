@@ -14,6 +14,7 @@ class UsersController < ApplicationController
     end
 
     def create
+        
         @user = User.new(user_params)
         if @user.save
             login!
@@ -42,6 +43,17 @@ class UsersController < ApplicationController
         end
     end
 
+    def update
+        if logged_in? && admin?
+            if @user.update_attributes(user_params)
+              render json: @user, status: :ok
+            else
+              render json: @user, status: :unprocessable_entity
+            end
+          else
+            render json: :unprocessable_entity
+          end
+    end
     
     private
 

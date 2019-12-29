@@ -10,33 +10,46 @@ class Api::V1::VariantsController < ApplicationController
     end
 
     def create
-        @variant = @special.variants.create(variant_params)
+        if logged_in? && admin?
+            @variant = @special.variants.create(variant_params)
 
-        if @variant.persisted? 
-            render json: @special, status: :ok
+            if @variant.persisted? 
+                render json: @special, status: :ok
+            else
+                render json: @special, status: :unprocessable_entity
+            end
         else
-            render json: @special, status: :unproccessable_entity
+            render json: {message: 'Not logged in as admin'}
         end
     end
 
     def show
-        render json: @special, status: :ok
+        render json: @variant, status: :ok
     
     end
 
     def update
-        if @variant.update_attributes(variant_params)
-            render json: @variant, status: :ok
+        if logged_in? && admin?
+            if @variant.update_attributes(variant_params)
+                render json: @variant, status: :ok
+            else
+                render json: @variant, status: :unprocessable_entity
+            end
         else
-            render json: @variant, status: :unprocessable_entity
+            render json: {message: 'Not logged in as admin'}
         end
+
     end
 
     def destroy
-        if @variant.destroy
-            render json: @variant, status: :ok
+        if logged_in? && admin?
+            if @variant.destroy
+                render json: @variant, status: :ok
+            else
+                head(:unprocessable_entity)
+            end
         else
-            head(:unprocessable_entity)
+            render json: {message: 'Not logged in as admin'}
         end
     end
 

@@ -10,21 +10,31 @@ class Api::V1::CharactersController < ApplicationController
   def create
     @character = Character.new(char_params)
 
-    if @character.save
-      render json: :ok
+    if logged_in? && admin?
+      if @character.save
+        render json: :ok
+      else
+        render json: :unprocessable_entity
+      end
     else
-      render json: :unprocessable_entity
+      render json: {message: 'Not logged in as admin'}
     end
 
   end
 
   def destroy
     
-    if @character.destroy
-      head(:ok)
+    if logged_in? && admin?
+      if @character.destroy
+        head(:ok)
+      else
+        head(:unprocessable_entity)
+      end
     else
-      head(:unprocessable_entity)
+      rrender json: {message: 'Not logged in as admin'}
     end
+
+
   end
 
   def show
@@ -33,13 +43,15 @@ class Api::V1::CharactersController < ApplicationController
   end
 
   def update
-    
-    if @character.update_attributes(char_params)
-      render json: @character, status: :ok
+    if logged_in? && admin?
+      if @character.update_attributes(char_params)
+        render json: @character, status: :ok
+      else
+        render json: @character, status: :unprocessable_entity
+      end
     else
-      render json: @character, status: :unprocessable_entity
+      render json: {message: 'Not logged in as admin'}
     end
-    
   end
 
 

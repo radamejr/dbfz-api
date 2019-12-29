@@ -9,12 +9,16 @@ class Api::V1::NormalsController < ApplicationController
   end
 
   def create
-    @normal = @character.normals.create(normal_params)
+    if logged_in? && admin?
+      @normal = @character.normals.create(normal_params)
 
-    if @normal.persisted?
-      render json: @normal, status: :ok
+      if @normal.persisted?
+        render json: @normal, status: :ok
+      else
+        render json: @normal, status: :unprocessable_entity
+      end
     else
-      render json: @normal, status: :unproccessable_entity
+      render json: {message: 'Not logged in as admin'}
     end
   end
 
@@ -24,20 +28,26 @@ class Api::V1::NormalsController < ApplicationController
   end
 
   def destroy
-    
-    if @normal.destroy
-      render json: @normal, status: :ok
+    if logged_in? && admin?
+      if @normal.destroy
+        render json: @normal, status: :ok
+      else
+        head(:unprocessable_entity)
+      end
     else
-      head(:unprocessable_entity)
+        render json: {message: 'Not logged in as admin'}
     end
   end
 
   def update
-
-    if @normal.update_attributes(normal_params)
-      render json: @normal, status: :ok
+    if logged_in? && admin?
+      if @normal.update_attributes(normal_params)
+        render json: @normal, status: :ok
+      else
+        render json: @normal, status: :unprocessable_entity
+      end
     else
-      render json: @normal, status: :unprocessable_entity
+        render json: {message: 'Not logged in as admin'}
     end
   end
 

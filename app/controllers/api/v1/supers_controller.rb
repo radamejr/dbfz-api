@@ -9,12 +9,16 @@ class Api::V1::SupersController < ApplicationController
   end
 
   def create
-    @super = @character.supers.create(super_params)
+    if logged_in? && admin?
+      @super = @character.supers.create(super_params)
 
-    if @super.persisted?
-      render json: @super, status: :ok
+      if @super.persisted?
+        render json: @super, status: :ok
+      else
+        render json: @super, status: :unprocessable_entity
+      end
     else
-      render json: @super, status: :unproccessable_entity
+      render json: {message: 'Not logged in as admin'}
     end
   end
 
@@ -24,20 +28,26 @@ class Api::V1::SupersController < ApplicationController
   end
 
   def destroy
-    
-    if @super.destroy
-      render json: @super, status: :ok
+    if logged_in? && admin?
+      if @super.destroy
+        render json: @super, status: :ok
+      else
+        head(:unprocessable_entity)
+      end
     else
-      head(:unprocessable_entity)
+      render json: {message: 'Not logged in as admin'}
     end
   end
 
   def update
-
-    if @super.update_attributes(super_params)
-      render json: @super, status: :ok
+    if logged_in? && admin?
+      if @super.update_attributes(super_params)
+        render json: @super, status: :ok
+      else
+        render json: @super, status: :unprocessable_entity
+      end
     else
-      render json: @super, status: :unprocessable_entity
+      render json: {message: 'Not logged in as admin'}
     end
   end
 

@@ -9,12 +9,16 @@ class Api::V1::AssistsController < ApplicationController
     end
   
     def create
-      @assist = @character.assists.create(assist_params)
-  
-      if @assist.persisted?
-        render json: @assist, status: :ok
+      if logged_in? && admin?
+        @assist = @character.assists.create(assist_params)
+    
+        if @assist.persisted?
+          render json: @assist, status: :ok
+        else
+          render json: @assist, status: :unprocessable_entity
+        end
       else
-        render json: @assist, status: :unproccessable_entity
+        render json: {message: 'Not logged in as admin'}
       end
     end
   
@@ -24,20 +28,27 @@ class Api::V1::AssistsController < ApplicationController
     end
   
     def destroy
-      
-      if @assist.destroy
-        render json: @assist, status: :ok
+      if logged_in? && admin?
+        if @assist.destroy
+          render json: @assist, status: :ok
+        else
+          head(:unprocessable_entity)
+        end
       else
-        head(:unprocessable_entity)
+        render json: {message: 'Not logged in as admin'}
       end
+
     end
   
     def update
-  
-      if @assist.update_attributes(assist_params)
-        render json: @assist, status: :ok
+      if logged_in? && admin?
+        if @assist.update_attributes(assist_params)
+          render json: @assist, status: :ok
+        else
+          render json: @assist, status: :unprocessable_entity
+        end
       else
-        render json: @assist, status: :unprocessable_entity
+          render json: {message: 'Not logged in as admin'}
       end
     end
   

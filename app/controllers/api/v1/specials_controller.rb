@@ -9,12 +9,16 @@ class Api::V1::SpecialsController < ApplicationController
   end
 
   def create
-    @special = @character.specials.create(special_params)
+    if logged_in? && admin?
+      @special = @character.specials.create(special_params)
 
-    if @special.persisted?
-      render json: @special, status: :ok
+      if @special.persisted?
+        render json: @special, status: :ok
+      else
+        render json: @special, status: :unprocessable_entity
+      end
     else
-      render json: @special, status: :unproccessable_entity
+      render json: {message: 'Not logged in as admin'}
     end
   end
 
@@ -24,20 +28,26 @@ class Api::V1::SpecialsController < ApplicationController
   end
 
   def destroy
-    
-    if @special.destroy
-      render json: @special, status: :ok
+    if logged_in? && admin?
+      if @special.destroy
+        render json: @special, status: :ok
+      else
+        head(:unprocessable_entity)
+      end
     else
-      head(:unprocessable_entity)
+      render json: {message: 'Not logged in as admin'}
     end
   end
 
   def update
-
-    if @special.update_attributes(special_params)
-      render json: @special, status: :ok
+    if logged_in? && admin?
+      if @special.update_attributes(special_params)
+        render json: @special, status: :ok
+      else
+        render json: @special, status: :unprocessable_entity
+      end
     else
-      render json: @special, status: :unprocessable_entity
+      render json: {message: 'Not logged in as admin'}
     end
   end
 

@@ -64,7 +64,7 @@ class Api::V1::AssistsController < ApplicationController
     end
     
     def assist_params
-      params.require(:assist).permit(:startup, :blockstun, :active, :onscreen, :hitstop_block, :hitstop_hit, :special_notes, :picture) 
+      params.require(:assist).permit(:startup, :blockstun, :active, :onscreen, :hitstop_block, :hitstop_hit, :special_notes, :hit_stun, :picture) 
     end
 
 

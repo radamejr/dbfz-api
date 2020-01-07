@@ -64,6 +64,6 @@ class Api::V1::SupersController < ApplicationController
   end
   
   def super_params
-    params.require(:super).permit(:name, :input, :startup, :active, :recovery, :advantage, :gaurd, :immune_to, :picture, :properties, :special_notes, :meter_used) 
+    params.require(:super).permit(:name, :input, :startup, :active, :recovery, :advantage, :gaurd, :immune_to, :picture, :properties, :special_notes, :meter_used, :raw_damage, :scaled_damage) 
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_28_133548) do
+ActiveRecord::Schema.define(version: 2020_01_07_214953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,13 +20,13 @@ ActiveRecord::Schema.define(version: 2019_12_28_133548) do
     t.integer "blockstun"
     t.integer "active"
     t.integer "onscreen"
-    t.integer "hitstop_block"
-    t.integer "hitstop_hit"
+    t.string "hitstop"
     t.string "special_notes"
     t.integer "character_id"
     t.string "picture"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "hit_stun"
   end
 
   create_table "characters", force: :cascade do |t|
@@ -85,6 +85,8 @@ ActiveRecord::Schema.define(version: 2019_12_28_133548) do
     t.string "properties"
     t.text "special_notes"
     t.string "active"
+    t.integer "raw_damage"
+    t.integer "scaled_damage"
   end
 
   create_table "users", force: :cascade do |t|
@@ -102,7 +104,7 @@ ActiveRecord::Schema.define(version: 2019_12_28_133548) do
     t.integer "recovery"
     t.integer "active"
     t.integer "advantage"
-    t.integer "immune_to"
+    t.string "immune_to"
     t.integer "meter_used"
     t.string "gaurd"
     t.string "properties"

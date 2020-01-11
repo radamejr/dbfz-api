@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_07_214953) do
+ActiveRecord::Schema.define(version: 2020_01_11_145550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,23 @@ ActiveRecord::Schema.define(version: 2020_01_07_214953) do
     t.string "move_type"
   end
 
+  create_table "special_variants", force: :cascade do |t|
+    t.string "input_type"
+    t.integer "startup"
+    t.integer "recovery"
+    t.integer "active"
+    t.integer "advantage"
+    t.string "immune_to"
+    t.integer "meter_used"
+    t.string "gaurd"
+    t.string "properties"
+    t.string "special_notes"
+    t.integer "special_id"
+    t.string "picture"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "specials", force: :cascade do |t|
     t.string "name"
     t.string "input"
@@ -67,6 +84,23 @@ ActiveRecord::Schema.define(version: 2020_01_07_214953) do
     t.datetime "updated_at", null: false
     t.string "picture"
     t.text "special_notes"
+  end
+
+  create_table "super_variants", force: :cascade do |t|
+    t.string "input_type"
+    t.integer "startup"
+    t.integer "recovery"
+    t.integer "active"
+    t.integer "advantage"
+    t.string "immune_to"
+    t.integer "meter_used"
+    t.string "gaurd"
+    t.string "properties"
+    t.string "special_notes"
+    t.integer "super_id"
+    t.string "picture"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "supers", force: :cascade do |t|
@@ -94,23 +128,6 @@ ActiveRecord::Schema.define(version: 2020_01_07_214953) do
     t.string "email"
     t.string "password_digest"
     t.boolean "admin", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "variants", force: :cascade do |t|
-    t.string "input_type"
-    t.integer "startup"
-    t.integer "recovery"
-    t.integer "active"
-    t.integer "advantage"
-    t.string "immune_to"
-    t.integer "meter_used"
-    t.string "gaurd"
-    t.string "properties"
-    t.string "special_notes"
-    t.integer "special_id"
-    t.string "picture"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

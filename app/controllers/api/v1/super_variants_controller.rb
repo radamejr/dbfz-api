@@ -1,22 +1,22 @@
-class Api::V1::VariantsController < ApplicationController
+class Api::V1::SuperVariantsController < ApplicationController
     before_action :set_character
-    before_action :set_special
+    before_action :set_super
     before_action :set_variants, only: [:show, :update, :destroy]
 
     def index
-        @variants = @special.variants.all
+        @variants = @super.super_variants.all
 
         render json: @variants, status: :ok
     end
 
     def create
         if logged_in? && admin?
-            @variant = @special.variants.create(variant_params)
+            @variant = @super.super_variants.create(variant_params)
 
             if @variant.persisted? 
-                render json: @special, status: :ok
+                render json: @super, status: :ok
             else
-                render json: @special, status: :unprocessable_entity
+                render json: @super, status: :unprocessable_entity
             end
         else
             render json: {message: 'Not logged in as admin'}
@@ -59,18 +59,18 @@ class Api::V1::VariantsController < ApplicationController
         @character = Character.find(params[:character_id])
     end
     
-    def set_special
+    def set_super
         @character = Character.find(params[:character_id])
-        @special = @character.specials.find(params[:special_id])
+        @super = @character.supers.find(params[:super_id])
     end
 
     def set_variants
         @character = Character.find(params[:character_id])
-        @special = @character.specials.find(params[:special_id])
-        @variant = @special.variants.find(params[:id])
+        @super = @character.supers.find(params[:super_id])
+        @variant = @super.super_variants.find(params[:id])
     end
     
     def variant_params
-        params.require(:variant).permit(:input_type, :startup, :active, :recovery, :advantage, :immune_to, :meter_used, :gaurd, :properties, :special_notes, :picture) 
+        params.require(:super_variant).permit(:input_type, :startup, :active, :recovery, :advantage, :immune_to, :meter_used, :gaurd, :properties, :special_notes, :picture) 
     end
 end

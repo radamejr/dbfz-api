@@ -10,9 +10,11 @@ Rails.application.routes.draw do
       resources :characters do
         resources :assists, only: [:index, :create, :show, :update, :destroy]
         resources :normals, only: [:index, :create, :show, :update, :destroy]
-        resources :supers, only: [:index, :create, :show, :update, :destroy] 
+        resources :supers, only: [:index, :create, :show, :update, :destroy] do
+          resources :super_variants, only: [:index, :create, :show, :update, :destroy]
+        end
         resources :specials, only: [:index, :create, :show, :update, :destroy] do
-          resources :variants, only: [:index, :create, :show, :update, :destroy]
+          resources :special_variants, only: [:index, :create, :show, :update, :destroy]
         end
       end
     end

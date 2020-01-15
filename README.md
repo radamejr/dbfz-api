@@ -1,24 +1,24 @@
-# README
+# Framehameha - API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This Rails Applicaiton is actually an API only backend that goes hand in hand with a React front end. This API handles all get, put and post requests as needed by the front end.
 
-Things you may want to cover:
+## Getting Started
 
-* Ruby version
+You can visit the front-end portion of this application in the wild by clicking [here.](https://framehameha.herokuapp.com/)
+You can visit the front-end git-hub [here.](https://github.com/radamejr/dbfz)
 
-* System dependencies
+## Notable Languages, Systems and Gems Used
 
-* Configuration
+- Ruby on Rails
+- [Carrierwave](https://github.com/carrierwaveuploader/carrierwave)
+- [Carrierwave-base64](https://github.com/y9v/carrierwave-base64)
+- [Fog/AWS](https://github.com/fog/fog-aws)
+- [Rack/Cors](https://github.com/cyu/rack-cors)
+- [bcrypt-ruby](https://github.com/codahale/bcrypt-ruby)
 
-* Database creation
 
-* Database initialization
 
-* How to run the test suite
+## Authors
 
-* Services (job queues, cache servers, search engines, etc.)
+* **Robert Adame** - [GitHub](https://github.com/radamejr)
 
-* Deployment instructions
-
-* ...

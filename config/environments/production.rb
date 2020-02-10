@@ -83,5 +83,5 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   #production rack::cors setting
-  config.allowed_cors_origins = ["https://framehameha.herokuapp.com" , "https://www.framehameha.com"]
+  config.allowed_cors_origins = ["https://www.framehameha.com" , "https://framehameha.herokuapp.com"]
 end

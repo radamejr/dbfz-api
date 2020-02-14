@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+    wrap_parameters :user, include: [:username, :email, :password, :password_confirmation]
+
     def index
         @users = Users.all
         if @users
@@ -15,7 +17,8 @@ class UsersController < ApplicationController
 
     def create
         
-        @user = User.new(user_params)
+        @user = User.new(new_user_params)
+
         if @user.save
             login!
             render json: {
@@ -50,7 +53,7 @@ class UsersController < ApplicationController
             else
               render json: @user, status: :unprocessable_entity
             end
-          else
+          else  
             render json: :unprocessable_entity
           end
     end
@@ -60,4 +63,9 @@ class UsersController < ApplicationController
     def user_params
         params.require(:user).permit(:username, :email, :password, :password_confirmation, :admin)
     end
+
+    def new_user_params
+        params.require(:user).permit(:username, :email, :password, :password_confirmation)
+    end
+
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_11_145550) do
+ActiveRecord::Schema.define(version: 2020_02_22_223646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2020_01_11_145550) do
     t.string "properties"
     t.text "special_notes"
     t.string "move_type"
+    t.integer "list_order"
   end
 
   create_table "special_variants", force: :cascade do |t|

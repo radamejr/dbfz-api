@@ -5,7 +5,7 @@ class FixSorting < ActiveRecord::Migration[5.2]
      #loop through each character, getting every normal
      chars.each do |char|
        normal_index = 1
-       norms = char.normals.all
+       norms = char.normals.all.order('id ASC')
        #once you have the normals, loop through every single one, and add a value to its list_order. sequencially.
        norms.each do |norm|
          norm.list_order = normal_index

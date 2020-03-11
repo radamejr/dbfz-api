@@ -8,8 +8,8 @@ class SessionsController < ApplicationController
                 logged_in: true,
                 user: @user
             }
-            response.set_header('Set-Cookie', 'SameSite=None')
-            response.set_header('Set-Cookie', 'Secure')
+            response.set_header('Set-Cookie', 'Secure; SameSite=None')
+    
         else
             render json: {
                 status: 401,

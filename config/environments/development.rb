@@ -53,5 +53,5 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   #dev rack::cors setting
-  config.allowed_cors_origins = ["http://localhost:8080"]
+  config.allowed_cors_origins = ["http://localhost:8000"]
 end

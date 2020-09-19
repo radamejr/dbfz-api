@@ -40,7 +40,7 @@ module DbfzChar
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
 
-    config.middleware.insert_after ActionDispatch::Cookies, ActionDispatch::Session::CookieStore, :key => '_framehameha_session', same_site: :none, secure: Rails.env.production?, expire_after: 14.days, httponly: true
+    config.middleware.insert_after ActionDispatch::Cookies, ActionDispatch::Session::CookieStore, :key => '_framehameha_session', same_site: :none, secure: :true, expire_after: 14.days, httponly: true
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

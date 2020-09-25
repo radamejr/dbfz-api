@@ -10,23 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_22_225404) do
+ActiveRecord::Schema.define(version: 2020_09_25_004049) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "assists", force: :cascade do |t|
-    t.integer "startup"
-    t.integer "blockstun"
-    t.integer "active"
-    t.integer "onscreen"
+    t.string "startup"
+    t.string "blockstun"
+    t.string "active"
+    t.string "onscreen"
     t.string "hitstop"
     t.string "special_notes"
     t.integer "character_id"
     t.string "picture"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "hit_stun"
+    t.string "hit_stun"
   end
 
   create_table "characters", force: :cascade do |t|
@@ -44,10 +44,10 @@ ActiveRecord::Schema.define(version: 2020_02_22_225404) do
 
   create_table "normals", force: :cascade do |t|
     t.string "input"
-    t.integer "startup"
-    t.integer "active"
-    t.integer "recovery"
-    t.integer "advantage"
+    t.string "startup"
+    t.string "active"
+    t.string "recovery"
+    t.string "advantage"
     t.string "immune_to"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -62,10 +62,10 @@ ActiveRecord::Schema.define(version: 2020_02_22_225404) do
 
   create_table "special_variants", force: :cascade do |t|
     t.string "input_type"
-    t.integer "startup"
-    t.integer "recovery"
-    t.integer "active"
-    t.integer "advantage"
+    t.string "startup"
+    t.string "recovery"
+    t.string "active"
+    t.string "advantage"
     t.string "immune_to"
     t.integer "meter_used"
     t.string "gaurd"
@@ -89,10 +89,10 @@ ActiveRecord::Schema.define(version: 2020_02_22_225404) do
 
   create_table "super_variants", force: :cascade do |t|
     t.string "input_type"
-    t.integer "startup"
-    t.integer "recovery"
-    t.integer "active"
-    t.integer "advantage"
+    t.string "startup"
+    t.string "recovery"
+    t.string "active"
+    t.string "advantage"
     t.string "immune_to"
     t.integer "meter_used"
     t.string "gaurd"
@@ -109,9 +109,9 @@ ActiveRecord::Schema.define(version: 2020_02_22_225404) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.string "input"
-    t.integer "startup"
-    t.integer "recovery"
-    t.integer "advantage"
+    t.string "startup"
+    t.string "recovery"
+    t.string "advantage"
     t.string "immune_to"
     t.integer "character_id"
     t.integer "meter_used"

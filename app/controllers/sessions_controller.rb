@@ -6,7 +6,13 @@ class SessionsController < ApplicationController
             login!
             render json: {
                 logged_in: true,
-                user: @user
+                status: 200,
+                user: {
+                    admin: @user.admin,
+                    email: @user.email,
+                    username: @user.username,
+                    id: @user.id,
+                }
             }
             response.set_header('Set-Cookie', 'Secure; SameSite=None')
     
@@ -22,11 +28,18 @@ class SessionsController < ApplicationController
         if logged_in? && current_user
             render json: {
                 logged_in: true,
-                user: current_user
+                status: 200,
+                user: {
+                    admin: @user.admin,
+                    email: @user.email,
+                    username: @user.username,
+                    id: @user.id,
+                }
             }
         else
             render json: {
                 logged_in: false,
+                status: 401,
                 message: 'no session found'
             }
         end

@@ -45,12 +45,31 @@ class Api::V1::UsersController < ApplicationController
         end
     end
 
-    def update
-        if @user.update_attributes(user_params)
-            render json: @user, status: :ok
+    def auth
+        @user = @user = User.select('email, username, id, admin').find_by(id: params[:id])
+        if current_user && @user
+            if current_user.id === @user.id
+                render json: {
+                    user: @user
+                }
+            else
+                render json: { error: "Unauthorized" }, status: :unauthorized
+            end
         else
-            render json: @user, status: :unprocessable_entity
-        end  
+            render json: { error: "Unauthorized" }, status: :unauthorized
+        end
+    end
+
+    def update
+        if current_user.admin
+            if @user.update_attributes(user_params)
+                render json: @user, status: :ok
+            else
+                render json: @user, status: :unprocessable_entity
+            end  
+        else
+            render json: { error: "Unauthorized" }, status: :unauthorized
+        end
     end
     
     def find

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       post '/login' => 'user_token#create'
-      
+      get '/verify_user/:id' => 'users#auth'
       resources :users, only: [:index, :show, :create, :update, :find]
       resources :characters do
         resources :assists, only: [:index, :create, :show, :update, :destroy]

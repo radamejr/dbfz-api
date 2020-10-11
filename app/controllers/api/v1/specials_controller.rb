@@ -1,5 +1,5 @@
 class Api::V1::SpecialsController < ApplicationController
-   before_action :authenticate_user, only: [:update, :create, :destroy]
+  before_action :authenticate_user, only: [:update, :create, :destroy]
   before_action :set_character
   before_action :set_specials, only: [:show, :update, :destroy]
 

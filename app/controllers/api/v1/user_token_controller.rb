@@ -1,3 +1,12 @@
 class Api::V1::UserTokenController < Knock::AuthTokenController
-    protect_from_forgery with: :null_session
+    skip_before_action :verify_authenticity_token, raise: false
+
+
+    def create
+        render json: {
+            jwt: auth_token.token,
+            user: User.select('email, username, id, admin').find(auth_token.payload[:sub])
+        }, status: :ok
+    end
+
 end

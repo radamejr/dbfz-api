@@ -1,5 +1,5 @@
 class Api::V1::CharactersController < ApplicationController
-  before_action :authenticate_v1_user, only: [:update, :create, :destroy]
+   before_action :authenticate_user, only: [:update, :create, :destroy]
   before_action :set_character, only: [:update, :destroy, :show]
 
   def index

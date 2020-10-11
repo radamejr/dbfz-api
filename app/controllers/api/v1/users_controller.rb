@@ -1,9 +1,9 @@
 class Api::V1::UsersController < ApplicationController
     wrap_parameters :user, include: [:username, :email, :password, :password_confirmation]
-    before_action :authenticate_v1_user, only: [:update]
+    before_action :authenticate_user
 
     def index
-        @users = Users.all
+        @users = User.all
         if @users
             render json: {
                 users: @users

@@ -1,5 +1,6 @@
-class UsersController < ApplicationController
+class Api::V1::UsersController < ApplicationController
     wrap_parameters :user, include: [:username, :email, :password, :password_confirmation]
+    before_action :authenticate_v1_user, only: [:update]
 
     def index
         @users = Users.all
@@ -16,9 +17,7 @@ class UsersController < ApplicationController
     end
 
     def create
-        
         @user = User.new(new_user_params)
-
         if @user.save
             login!
             render json: {
@@ -47,17 +46,23 @@ class UsersController < ApplicationController
     end
 
     def update
-        if logged_in? && admin?
-            if @user.update_attributes(user_params)
-              render json: @user, status: :ok
-            else
-              render json: @user, status: :unprocessable_entity
-            end
-          else  
-            render json: :unprocessable_entity
-          end
+        if @user.update_attributes(user_params)
+            render json: @user, status: :ok
+        else
+            render json: @user, status: :unprocessable_entity
+        end  
     end
     
+    def find
+        @user = User.find_by(email: params[:user][:email])
+        if @user
+          render json: @user
+        else
+          @errors = @user.errors.full_messages
+          render json: @errors
+        end
+    end
+
     private
 
     def user_params
@@ -68,4 +73,7 @@ class UsersController < ApplicationController
         params.require(:user).permit(:username, :email, :password, :password_confirmation)
     end
 
+    def set_user
+        @user = User.find_by(id: params[:id])
+    end
 end

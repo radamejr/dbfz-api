@@ -1,7 +1,8 @@
 class Api::V1::SupersController < ApplicationController
+  before_action :authenticate_v1_user, only: [:update, :create, :destroy]
   before_action :set_character
   before_action :set_supers, only: [:show, :update, :destroy]
-
+  
   def index
     @supers = @character.supers.all
 
@@ -24,7 +25,6 @@ class Api::V1::SupersController < ApplicationController
 
   def show
     render json: @super, status: :ok
-
   end
 
   def destroy

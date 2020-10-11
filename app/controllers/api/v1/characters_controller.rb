@@ -2,9 +2,9 @@ class Api::V1::CharactersController < ApplicationController
   before_action :set_character, only: [:update, :destroy, :show]
 
   def index
-    @characters = Character.all
+    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
 
-    render json: @characters, status: :ok
+    render json: JSON.pretty_generate(@characters), status: :ok
   end
 
   def create

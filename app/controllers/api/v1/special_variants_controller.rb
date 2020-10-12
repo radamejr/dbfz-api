@@ -11,46 +11,72 @@ class Api::V1::SpecialVariantsController < ApplicationController
     end
 
     def create
-        if logged_in? && admin?
+        if current_user.admin
             @variant = @special.special_variants.create(variant_params)
 
             if @variant.persisted? 
-                render json: @special, status: :ok
+                render json: {
+                    status: 200,
+                    message: 'Successfully created!'
+                }
             else
-                render json: @special, status: :unprocessable_entity
+                render json: {
+                    status: 403,
+                    message: 'Unabled to create!'
+                }
             end
         else
-            render json: {message: 'Not logged in as admin'}
+            render json: { 
+                error: 'Not logged in as admin',
+                status: 401,
+            }
         end
     end
 
     def show
         render json: @variant, status: :ok
-    
     end
 
     def update
-        if logged_in? && admin?
+        if current_user.admin
             if @variant.update_attributes(variant_params)
-                render json: @variant, status: :ok
+                render json: {
+                    status: 200,
+                    message: 'Successfully updated!'
+                }
             else
-                render json: @variant, status: :unprocessable_entity
+                render json: {
+                    status: 403,
+                    message: 'Unabled to update!'
+                  }
             end
         else
-            render json: {message: 'Not logged in as admin'}
+            render json: { 
+                error: 'Not logged in as admin',
+                status: 401,
+            }
         end
 
     end
 
     def destroy
-        if logged_in? && admin?
+        if current_user.admin
             if @variant.destroy
-                render json: @variant, status: :ok
+                render json: {
+                    status: 200,
+                    message: 'Successfully deleted!'
+                  }
             else
-                head(:unprocessable_entity)
+                render json: {
+                    status: 403,
+                    message: 'Unabled to delete!'
+                  }
             end
         else
-            render json: {message: 'Not logged in as admin'}
+            render json: { 
+                error: 'Not logged in as admin',
+                status: 401,
+            }
         end
     end
 

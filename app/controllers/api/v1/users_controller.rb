@@ -11,7 +11,7 @@ class Api::V1::UsersController < ApplicationController
         else
             render json: {
                 status: 500,
-                errors: ['no users found']
+                error: ['no users found']
             }
         end
     end
@@ -19,20 +19,20 @@ class Api::V1::UsersController < ApplicationController
     def create
         @user = User.new(new_user_params)
         if @user.save
-            login!
+            auth_token = Knock::AuthToken.new payload: { sub: @user.id }
             render json: {
-                status: :created,
-                user: @user
+                jwt: auth_token.token,
+                user: User.select('email, username, id, admin').find(auth_token.payload[:sub])
             }
         else render json: {
             status: 500,
-            errors: @user.errors.full_messages
+            error: @user.errors.full_messages
             }
         end
     end
 
     def show
-        @user = User.find(params[:id])
+        @user = User.select('email, username, id, admin').find(params[:id])
         if @user
             render json: {
                 user: @user
@@ -40,35 +40,50 @@ class Api::V1::UsersController < ApplicationController
         else
             render json: {
                 status: 500,
-                errors: ['user not found']
+                error: ['user not found']
             }
         end
     end
 
     def auth
-        @user = @user = User.select('email, username, id, admin').find_by(id: params[:id])
+        @user = User.select('email, username, id, admin').find_by(id: params[:id])
         if current_user && @user
             if current_user.id === @user.id
                 render json: {
                     user: @user
                 }
             else
-                render json: { error: "Unauthorized" }, status: :unauthorized
+                render json: {
+                    status: 500,
+                    error: ['Unauthorized']
+                }
             end
         else
-            render json: { error: "Unauthorized" }, status: :unauthorized
+            render json: {
+                status: 500,
+                error: ['Unauthorized']
+            }
         end
     end
 
     def update
         if current_user.admin
             if @user.update_attributes(user_params)
-                render json: @user, status: :ok
+                render json: {
+                    user: @user.select('email, username, id, admin'),
+                    status: 200,
+                }
             else
-                render json: @user, status: :unprocessable_entity
+                render json: {
+                    status: 401,
+                    error: ['Unable to update']
+                }
             end  
         else
-            render json: { error: "Unauthorized" }, status: :unauthorized
+            render json: {
+                status: 500,
+                error: ['Unauthorized']
+            }
         end
     end
     

@@ -11,16 +11,25 @@ class Api::V1::SuperVariantsController < ApplicationController
     end
 
     def create
-        if logged_in? && admin?
+        if current_user.admin
             @variant = @super.super_variants.create(variant_params)
 
             if @variant.persisted? 
-                render json: @super, status: :ok
+                render json: {
+                    status: 200,
+                    message: 'Successfully created!'
+                  }
             else
-                render json: @super, status: :unprocessable_entity
+                render json: {
+                    status: 403,
+                    message: 'Unabled to create!'
+                  }
             end
         else
-            render json: {message: 'Not logged in as admin'}
+            render json: { 
+                error: 'Not logged in as admin',
+                status: 401,
+            }
         end
     end
 
@@ -30,27 +39,46 @@ class Api::V1::SuperVariantsController < ApplicationController
     end
 
     def update
-        if logged_in? && admin?
+        if current_user.admin
             if @variant.update_attributes(variant_params)
-                render json: @variant, status: :ok
+                render json: {
+                    #variant: @variant.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]}), potentially unneeded since state is updated for all characters
+                    status: 200,
+                    message: 'Successfully updated!'
+                  }
             else
-                render json: @variant, status: :unprocessable_entity
+                render json: { 
+                    error: 'Unable to update!',
+                    status: 401,
+                }
             end
         else
-            render json: {message: 'Not logged in as admin'}
+            render json: { 
+                error: 'Not logged in as admin',
+                status: 401,
+            }
         end
 
     end
 
     def destroy
-        if logged_in? && admin?
+        if current_user.admin
             if @variant.destroy
-                render json: @variant, status: :ok
+                render json: {
+                    status: 200,
+                    message: 'Successfully deleted!'
+                }
             else
-                head(:unprocessable_entity)
+                render json: {
+                    status: 403,
+                    message: 'Unabled to delete!'
+                }
             end
         else
-            render json: {message: 'Not logged in as admin'}
+            render json: { 
+                error: 'Not logged in as admin',
+                status: 401,
+            }
         end
     end
 

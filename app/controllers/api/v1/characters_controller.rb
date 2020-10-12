@@ -9,30 +9,47 @@ class Api::V1::CharactersController < ApplicationController
   end
 
   def create
-    @character = Character.new(char_params)
-
-    if logged_in? && admin?
+    if current_user.admin?
+      @character = Character.new(char_params)
       if @character.save
-        render json: :ok
+        render json: {
+          status: 200,
+          message: 'Successfully created!'
+        }
       else
-        render json: :unprocessable_entity
+        render json: {
+          status: 403,
+          message: 'Unabled to create!'
+        }
       end
     else
-      render json: {message: 'Not logged in as admin'}
+      render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
 
   end
 
   def destroy
     
-    if logged_in? && admin?
+    if current_user.admin
       if @character.destroy
-        head(:ok)
+        render json: {
+          status: 200,
+          message: 'Successfully deleted!'
+        }
       else
-        head(:unprocessable_entity)
+        render json: {
+          status: 403,
+          message: 'Unabled to delete!'
+        }
       end
     else
-      rrender json: {message: 'Not logged in as admin'}
+      render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
 
 
@@ -40,18 +57,27 @@ class Api::V1::CharactersController < ApplicationController
 
   def show
     render json: @character, status: :ok
-
   end
 
   def update
-    if logged_in? && admin?
+    if current_user.admin
       if @character.update_attributes(char_params)
-        render json: @character, status: :ok
+        render json: {
+          #character: @character.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]}), potentially unneeded since state is updated for all characters
+          status: 200,
+          message: 'Successfully updated!'
+        }
       else
-        render json: @character, status: :unprocessable_entity
+        render json: { 
+          error: 'Unable to update!',
+          status: 401,
+        }
       end
     else
-      render json: {message: 'Not logged in as admin'}
+      render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
   end
 

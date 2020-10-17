@@ -3,18 +3,23 @@ class Api::V1::CharactersController < ApplicationController
   before_action :set_character, only: [:update, :destroy, :show]
 
   def index
-    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+    set_all_characters()
 
-    render json: JSON.pretty_generate(@characters), status: :ok
+    render json: {
+      status: 200,
+      characters: @characters
+    }
   end
 
   def create
     if current_user.admin?
       @character = Character.new(char_params)
       if @character.save
+        set_all_characters()
         render json: {
           status: 200,
-          message: 'Successfully created!'
+          message: 'Successfully created!',
+          characters: @characters
         }
       else
         render json: {
@@ -35,9 +40,11 @@ class Api::V1::CharactersController < ApplicationController
     
     if current_user.admin
       if @character.destroy
+        set_all_characters()
         render json: {
           status: 200,
-          message: 'Successfully deleted!'
+          message: 'Successfully deleted!',
+          characters: @characters
         }
       else
         render json: {
@@ -62,8 +69,9 @@ class Api::V1::CharactersController < ApplicationController
   def update
     if current_user.admin
       if @character.update_attributes(char_params)
+        set_all_characters()
         render json: {
-          #character: @character.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]}), potentially unneeded since state is updated for all characters
+          characters: @characters,
           status: 200,
           message: 'Successfully updated!'
         }
@@ -88,6 +96,10 @@ class Api::V1::CharactersController < ApplicationController
    @character = Character.find(params[:id])
   end
 
+  def set_all_characters
+    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+  end
+  
   def char_params
     params.require(:character).permit(:name, :dlc, :discord_link, :combo_doc_link, :icon, :character_picture, :twitter_tag, :about)
   end

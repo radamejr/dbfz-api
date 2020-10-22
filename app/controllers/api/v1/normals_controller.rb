@@ -14,9 +14,11 @@ class Api::V1::NormalsController < ApplicationController
       @normal = @character.normals.create(normal_params)
 
       if @normal.persisted?
+        set_all_characters()
         render json: {
           status: 200,
-          message: 'Successfully created!'
+          message: 'Successfully created!',
+          characters: @characters
         }
       else
         render json: {
@@ -40,9 +42,11 @@ class Api::V1::NormalsController < ApplicationController
   def destroy
     if current_user.admin
       if @normal.destroy
+        set_all_characters()
         render json: {
           status: 200,
-          message: 'Successfully deleted!'
+          message: 'Successfully deleted!',
+          characters: @characters
         }
       else
         render json: {
@@ -61,10 +65,11 @@ class Api::V1::NormalsController < ApplicationController
   def update
     if current_user.admin
       if @normal.update_attributes(normal_params)
+        set_all_characters()
         render json: {
-          #normal: @normal.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]}), potentially unneeded since state is updated for all characters
           status: 200,
-          message: 'Successfully updated!'
+          message: 'Successfully updated!',
+          characters: @characters
         }
       else
         render json: { 
@@ -90,7 +95,11 @@ class Api::V1::NormalsController < ApplicationController
     @character = Character.find(params[:character_id])
     @normal = @character.normals.find(params[:id])
   end
-  
+
+  def set_all_characters
+    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+  end
+
   def normal_params
     params.require(:normal).permit(:input, :startup, :active, :recovery, :advantage, :gaurd, :immune_to, :picture, :properties, :special_notes, :move_type, :list_order) 
   end

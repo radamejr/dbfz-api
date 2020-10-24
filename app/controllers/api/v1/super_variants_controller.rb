@@ -13,11 +13,12 @@ class Api::V1::SuperVariantsController < ApplicationController
     def create
         if current_user.admin
             @variant = @super.super_variants.create(variant_params)
-
+            set_all_characters()
             if @variant.persisted? 
                 render json: {
                     status: 200,
-                    message: 'Successfully created!'
+                    message: 'Successfully created!',
+                    characters: @characters
                   }
             else
                 render json: {
@@ -41,10 +42,11 @@ class Api::V1::SuperVariantsController < ApplicationController
     def update
         if current_user.admin
             if @variant.update_attributes(variant_params)
+                set_all_characters()
                 render json: {
-                    #variant: @variant.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]}), potentially unneeded since state is updated for all characters
                     status: 200,
-                    message: 'Successfully updated!'
+                    message: 'Successfully updated!',
+                    characters: @characters
                   }
             else
                 render json: { 
@@ -64,9 +66,11 @@ class Api::V1::SuperVariantsController < ApplicationController
     def destroy
         if current_user.admin
             if @variant.destroy
+                set_all_characters()
                 render json: {
                     status: 200,
-                    message: 'Successfully deleted!'
+                    message: 'Successfully deleted!',
+                    characters: @characters
                 }
             else
                 render json: {
@@ -98,7 +102,11 @@ class Api::V1::SuperVariantsController < ApplicationController
         @super = @character.supers.find(params[:super_id])
         @variant = @super.super_variants.find(params[:id])
     end
-    
+
+    def set_all_characters
+        @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+    end
+
     def variant_params
         params.require(:super_variant).permit(:input_type, :startup, :active, :recovery, :advantage, :immune_to, :meter_used, :gaurd, :properties, :special_notes, :picture) 
     end

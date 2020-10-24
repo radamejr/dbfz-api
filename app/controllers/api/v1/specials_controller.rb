@@ -14,9 +14,11 @@ class Api::V1::SpecialsController < ApplicationController
       @special = @character.specials.create(special_params)
 
       if @special.persisted?
+        set_all_characters()
         render json: {
           status: 200,
-          message: 'Successfully created!'
+          message: 'Successfully created!',
+          characters: @characters
         }
       else
         render json: {
@@ -40,9 +42,11 @@ class Api::V1::SpecialsController < ApplicationController
   def destroy
     if current_user.admin
       if @special.destroy
+        set_all_characters()
         render json: {
           status: 200,
-          message: 'Successfully destroyed!'
+          message: 'Successfully destroyed!',
+          characters: @characters
         }
       else
         render json: {
@@ -61,10 +65,11 @@ class Api::V1::SpecialsController < ApplicationController
   def update
     if current_user.admin
       if @special.update_attributes(special_params)
+        set_all_characters()
         render json: {
-          #special: @special.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]}), potentially unneeded since state is updated for all characters
           status: 200,
-          message: 'Successfully updated!'
+          message: 'Successfully updated!',
+          characters: @characters
         }
       else
         render json: { 
@@ -92,6 +97,10 @@ class Api::V1::SpecialsController < ApplicationController
     @special = @character.specials.find(params[:id])
   end
   
+  def set_all_characters
+    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+  end
+
   def special_params
     params.require(:special).permit(:name, :input, :special_notes, :picture) 
   end

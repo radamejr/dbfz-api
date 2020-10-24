@@ -14,9 +14,11 @@ class Api::V1::SupersController < ApplicationController
       @super = @character.supers.create(super_params)
 
       if @super.persisted?
+        set_all_characters()
         render json: {
           status: 200,
-          message: 'Successfully created!'
+          message: 'Successfully created!',
+          characters: @characters
         }
       else
         render json: {
@@ -38,10 +40,12 @@ class Api::V1::SupersController < ApplicationController
 
   def destroy
     if current_user.admin
+      set_all_characters()
       if @super.destroy
         render json: {
           status: 200,
-          message: 'Successfully deleted!'
+          message: 'Successfully deleted!',
+          characters: @characters
         }
       else
         render json: {
@@ -60,10 +64,11 @@ class Api::V1::SupersController < ApplicationController
   def update
     if current_user.admin
       if @super.update_attributes(super_params)
+        set_all_characters()
         render json: {
-          #super: @super.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]}), potentially unneeded since state is updated for all characters
           status: 200,
-          message: 'Successfully updated!'
+          message: 'Successfully updated!',
+          characters: @characters
         }
       else
         render json: { 
@@ -89,6 +94,10 @@ class Api::V1::SupersController < ApplicationController
   def set_supers
     @character = Character.find(params[:character_id])
     @super = @character.supers.find(params[:id])
+  end
+
+  def set_all_characters
+    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
   end
   
   def super_params

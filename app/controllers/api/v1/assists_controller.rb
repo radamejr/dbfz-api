@@ -14,9 +14,11 @@ class Api::V1::AssistsController < ApplicationController
         @assist = @character.assists.create(assist_params)
     
         if @assist.persisted?
+          set_all_characters()
           render json: {
             status: 200,
-            message: 'Successfully created!'
+            message: 'Successfully created!',
+            characters: @characters
           }
         else
           render json: {
@@ -40,9 +42,11 @@ class Api::V1::AssistsController < ApplicationController
     def destroy
       if current_user.admin
         if @assist.destroy
+          set_all_characters()
           render json: {
             status: 200,
-            message: 'Successfully deleted!'
+            message: 'Successfully deleted!',
+            characters: @characters
           }
         else
           render json: {
@@ -62,10 +66,11 @@ class Api::V1::AssistsController < ApplicationController
     def update
       if current_user.admin
         if @assist.update_attributes(assist_params)
+          set_all_characters()
           render json: {
-            #assist: @assist.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]}), potentially unneeded since state is updated for all characters
             status: 200,
-            message: 'Successfully updated!'
+            message: 'Successfully updated!',
+            characters: @characters
           }
         else
           render json: { 
@@ -91,6 +96,10 @@ class Api::V1::AssistsController < ApplicationController
       @character = Character.find(params[:character_id])
       @assist = @character.assists.find(params[:id])
     end
+
+    def set_all_characters
+      @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+    end 
     
     def assist_params
       params.require(:assist).permit(:startup, :blockstun, :active, :onscreen, :hitstop, :special_notes, :hit_stun, :picture) 

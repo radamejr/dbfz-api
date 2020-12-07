@@ -1,37 +1,62 @@
 class Api::V1::CharactersController < ApplicationController
+  before_action :authenticate_user, only: [:update, :create, :destroy]
   before_action :set_character, only: [:update, :destroy, :show]
 
   def index
-    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+    set_all_characters()
 
-    render json: JSON.pretty_generate(@characters), status: :ok
+    render json: {
+      status: 200,
+      characters: @characters
+    }
   end
 
   def create
-    @character = Character.new(char_params)
-
-    if logged_in? && admin?
+    if current_user.admin?
+      @character = Character.new(char_params)
       if @character.save
-        render json: :ok
+        set_all_characters()
+        render json: {
+          status: 200,
+          message: 'Successfully created!',
+          characters: @characters
+        }
       else
-        render json: :unprocessable_entity
+        render json: {
+          status: 403,
+          message: 'Unabled to create!'
+        }
       end
     else
-      render json: {message: 'Not logged in as admin'}
+      render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
 
   end
 
   def destroy
     
-    if logged_in? && admin?
+    if current_user.admin
       if @character.destroy
-        head(:ok)
+        set_all_characters()
+        render json: {
+          status: 200,
+          message: 'Successfully deleted!',
+          characters: @characters
+        }
       else
-        head(:unprocessable_entity)
+        render json: {
+          status: 403,
+          message: 'Unabled to delete!'
+        }
       end
     else
-      rrender json: {message: 'Not logged in as admin'}
+      render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
 
 
@@ -39,18 +64,28 @@ class Api::V1::CharactersController < ApplicationController
 
   def show
     render json: @character, status: :ok
-
   end
 
   def update
-    if logged_in? && admin?
+    if current_user.admin
       if @character.update_attributes(char_params)
-        render json: @character, status: :ok
+        set_all_characters()
+        render json: {
+          characters: @characters,
+          status: 200,
+          message: 'Successfully updated!'
+        }
       else
-        render json: @character, status: :unprocessable_entity
+        render json: { 
+          error: 'Unable to update!',
+          status: 401,
+        }
       end
     else
-      render json: {message: 'Not logged in as admin'}
+      render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
   end
 
@@ -61,6 +96,10 @@ class Api::V1::CharactersController < ApplicationController
    @character = Character.find(params[:id])
   end
 
+  def set_all_characters
+    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+  end
+  
   def char_params
     params.require(:character).permit(:name, :dlc, :discord_link, :combo_doc_link, :icon, :character_picture, :twitter_tag, :about)
   end

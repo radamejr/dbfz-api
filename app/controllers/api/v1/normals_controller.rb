@@ -1,4 +1,5 @@
 class Api::V1::NormalsController < ApplicationController
+  before_action :authenticate_user, only: [:update, :create, :destroy]
   before_action :set_character
   before_action :set_normals, only: [:show, :update, :destroy]
 
@@ -9,16 +10,27 @@ class Api::V1::NormalsController < ApplicationController
   end
 
   def create
-    if logged_in? && admin?
+    if current_user.admin
       @normal = @character.normals.create(normal_params)
 
       if @normal.persisted?
-        render json: @normal, status: :ok
+        set_all_characters()
+        render json: {
+          status: 200,
+          message: 'Successfully created!',
+          characters: @characters
+        }
       else
-        render json: @normal, status: :unprocessable_entity
+        render json: {
+          status: 403,
+          message: 'Unabled to create!'
+        }
       end
     else
-      render json: {message: 'Not logged in as admin'}
+      render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
   end
 
@@ -28,26 +40,48 @@ class Api::V1::NormalsController < ApplicationController
   end
 
   def destroy
-    if logged_in? && admin?
+    if current_user.admin
       if @normal.destroy
-        render json: @normal, status: :ok
+        set_all_characters()
+        render json: {
+          status: 200,
+          message: 'Successfully deleted!',
+          characters: @characters
+        }
       else
-        head(:unprocessable_entity)
+        render json: {
+          status: 403,
+          message: 'Unabled to delete!'
+        }
       end
     else
-        render json: {message: 'Not logged in as admin'}
+        render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
   end
 
   def update
-    if logged_in? && admin?
+    if current_user.admin
       if @normal.update_attributes(normal_params)
-        render json: @normal, status: :ok
+        set_all_characters()
+        render json: {
+          status: 200,
+          message: 'Successfully updated!',
+          characters: @characters
+        }
       else
-        render json: @normal, status: :unprocessable_entity
+        render json: { 
+          error: 'Failed to update character',
+          status: 401,
+        }
       end
     else
-        render json: {message: 'Not logged in as admin'}
+        render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
   end
 
@@ -61,7 +95,11 @@ class Api::V1::NormalsController < ApplicationController
     @character = Character.find(params[:character_id])
     @normal = @character.normals.find(params[:id])
   end
-  
+
+  def set_all_characters
+    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+  end
+
   def normal_params
     params.require(:normal).permit(:input, :startup, :active, :recovery, :advantage, :gaurd, :immune_to, :picture, :properties, :special_notes, :move_type, :list_order) 
   end

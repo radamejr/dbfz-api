@@ -1,4 +1,5 @@
 class Api::V1::SpecialsController < ApplicationController
+  before_action :authenticate_user, only: [:update, :create, :destroy]
   before_action :set_character
   before_action :set_specials, only: [:show, :update, :destroy]
 
@@ -9,16 +10,27 @@ class Api::V1::SpecialsController < ApplicationController
   end
 
   def create
-    if logged_in? && admin?
+    if current_user.admin
       @special = @character.specials.create(special_params)
 
       if @special.persisted?
-        render json: @special, status: :ok
+        set_all_characters()
+        render json: {
+          status: 200,
+          message: 'Successfully created!',
+          characters: @characters
+        }
       else
-        render json: @special, status: :unprocessable_entity
+        render json: {
+          status: 403,
+          message: 'Unabled to create!'
+        }
       end
     else
-      render json: {message: 'Not logged in as admin'}
+      render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
   end
 
@@ -28,26 +40,48 @@ class Api::V1::SpecialsController < ApplicationController
   end
 
   def destroy
-    if logged_in? && admin?
+    if current_user.admin
       if @special.destroy
-        render json: @special, status: :ok
+        set_all_characters()
+        render json: {
+          status: 200,
+          message: 'Successfully destroyed!',
+          characters: @characters
+        }
       else
-        head(:unprocessable_entity)
+        render json: {
+          status: 403,
+          message: 'Unabled to delete!'
+        }
       end
     else
-      render json: {message: 'Not logged in as admin'}
+      render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
   end
 
   def update
-    if logged_in? && admin?
+    if current_user.admin
       if @special.update_attributes(special_params)
-        render json: @special, status: :ok
+        set_all_characters()
+        render json: {
+          status: 200,
+          message: 'Successfully updated!',
+          characters: @characters
+        }
       else
-        render json: @special, status: :unprocessable_entity
+        render json: { 
+          error: 'Unable to update!',
+          status: 401,
+        }
       end
     else
-      render json: {message: 'Not logged in as admin'}
+      render json: { 
+        error: 'Not logged in as admin',
+        status: 401,
+      }
     end
   end
 
@@ -63,6 +97,10 @@ class Api::V1::SpecialsController < ApplicationController
     @special = @character.specials.find(params[:id])
   end
   
+  def set_all_characters
+    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+  end
+
   def special_params
     params.require(:special).permit(:name, :input, :special_notes, :picture) 
   end

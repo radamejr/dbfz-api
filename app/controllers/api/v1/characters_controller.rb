@@ -97,7 +97,8 @@ class Api::V1::CharactersController < ApplicationController
   end
 
   def set_all_characters
-    @characters = Character.all.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]})
+    @characters = Character.includes(:normals, :assists, specials: [:special_variants], supers: [:super_variants])
+    @characters = @characters.as_json({include: [:normals, {specials: { include: :special_variants }}, {supers: { include: :super_variants }}, :assists]});
   end
   
   def char_params
